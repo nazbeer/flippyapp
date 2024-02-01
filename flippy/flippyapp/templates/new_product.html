@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flippy App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #0379d9;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        form {
+            width: 50%;
+            margin: auto;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            font-weight: 600;
+        }
+        .card1-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .card1 {
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f2f2f2;
+            text-align: center;
+            border-radius: 5px;
+            color:#000 !important;
+            
+        }
+        .card1>a{
+            color:#777;
+        }
+        .card{
+            border:0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="btn btn-default logo ">Flippy</a>
+        <h3>Flippy App</h3>
+        <a href="/" class="btn btn-warning home-button d-none">Home</a>
+    </div>
+   <div class="card m-3">
+    <div class="card-body">
+        
+        <h4>Add New Product</h4>
+        <form method="post" action="{% url 'add-new-product' %}">
+            {% csrf_token %}
+            <label for="name">Product Name:</label>
+            <input type="text" name="name" required><br>
+            <label for="price">Product Price:</label>
+            <input type="number" name="price" step="0.01" required><br>
+            <label for="quantity">Product Quantity:</label>
+            <input type="number" name="quantity" required><br>
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

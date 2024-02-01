@@ -1,0 +1,118 @@
+<!-- order_with_address_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order With Address List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #0379d9;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        form {
+            width: 50%;
+            margin: auto;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color:#fff;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="btn btn-default logo">Flippy</a>
+        <h3>Flippy App</h3>
+        <a href="/" class="btn btn-warning home-button">Home</a>
+    </div>
+
+    <div class="container mt-4">
+        <h1>Order With Address List</h1>
+        <table id="orderWithAddressListTable" class="table">
+            <thead>
+                <tr>
+                    
+                    <th>Created On</th>
+                    <th>Total Amount</th>
+                    <th>Address</th>
+                    <th>Order Items</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order_with_address in order_with_addresses %}
+                    <tr>
+                        
+                        <td>{{ order_with_address.created_on }}</td>
+                        <td>{{ order_with_address.total_amount }}</td>
+                        <td>
+                            {{ order_with_address.user_address.city }},
+                            {{ order_with_address.user_address.country }}
+                            {{ order_with_address.user_address.zip_code }}
+                        </td>
+                        <td>
+                            {% for item in order_with_address.order_items %}
+                                {{ item.product.name }} - Quantity: {{ item.bought_quantity }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#orderWithAddressListTable').DataTable();
+        });
+    </script>
+</body>
+</html>

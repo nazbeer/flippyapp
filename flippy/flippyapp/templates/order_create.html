@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #0379d9;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        form {
+            width: 100%;
+            margin: auto;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color:#fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="btn btn-default logo">Flippy</a>
+        <h3>Create Order</h3>
+        <a href="/" class="btn btn-warning home-button">Home</a>
+    </div>
+
+    <div class="container">
+        <form id="orderForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="created_on">Created On:</label>
+                <input type="datetime-local" class="form-control" name="created_on" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address.country">Country:</label>
+                <select name="address.country" class="form-control" id="countrySelect" onchange="updateCities()" required>
+                    <option value="" disabled selected>Select Country</option>
+                    <option value="USA">United States</option>
+                    <option value="CAN">Canada</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="address.city">City:</label>
+                <select name="address.city" class="form-control" id="citySelect" onchange="updateZipCodes()" required>
+                    <option value="" disabled selected>Select City</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="address.zip_code">Zip Code:</label>
+                <select name="address.zip_code" class="form-control" id="zipCodeSelect" required>
+                    <option value="" disabled selected>Select Zip Code</option>
+                </select>
+            </div>
+
+            <button class="btn btn-success" type="submit">Create Order</button>
+        </form>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        const cityData = {
+            USA: ['New York', 'Los Angeles', 'Chicago'],
+            CAN: ['Toronto', 'Vancouver', 'Montreal'],
+        };
+
+        const zipCodeData = {
+            USA: {
+                'New York': ['10001', '10002', '10003'],
+                'Los Angeles': ['90001', '90002', '90003'],
+                'Chicago': ['60601', '60602', '60603'],
+            },
+            CAN: {
+                'Toronto': ['M5A', 'M5B', 'M5C'],
+                'Vancouver': ['V6B', 'V6C', 'V6E'],
+                'Montreal': ['H1A', 'H1B', 'H1C'],
+            },
+        };
+
+        function updateCities() {
+            const countrySelect = document.getElementById('countrySelect');
+            const citySelect = document.getElementById('citySelect');
+            const zipCodeSelect = document.getElementById('zipCodeSelect');
+
+            const selectedCountry = countrySelect.value;
+
+            // Clear previous options
+            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+            zipCodeSelect.innerHTML = '<option value="" disabled selected>Select Zip Code</option>';
+
+            // Populate cities based on the selected country
+            if (selectedCountry && cityData[selectedCountry]) {
+                cityData[selectedCountry].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        function updateZipCodes() {
+            const countrySelect = document.getElementById('countrySelect');
+            const citySelect = document.getElementById('citySelect');
+            const zipCodeSelect = document.getElementById('zipCodeSelect');
+
+            const selectedCountry = countrySelect.value;
+            const selectedCity = citySelect.value;
+
+            // Clear previous options
+            zipCodeSelect.innerHTML = '<option value="" disabled selected>Select Zip Code</option>';
+
+            // Populate zip codes based on the selected country and city
+            if (selectedCountry && selectedCity && zipCodeData[selectedCountry] && zipCodeData[selectedCountry][selectedCity]) {
+                zipCodeData[selectedCountry][selectedCity].forEach(zipCode => {
+                    const option = document.createElement('option');
+                    option.value = zipCode;
+                    option.textContent = zipCode;
+                    zipCodeSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #0379d9;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        form {
+            width: 50%;
+            margin: auto;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="btn btn-default logo">Flippy</a>
+        <h3>Product List</h3>
+        <a href="/" class="btn btn-warning home-button">Home</a>
+    </div>
+    <div class="container">
+        
+        <div class="card1">
+            <div class="card-body">
+                <form id="filterForm">
+                    <label for="min_price">Min Price:</label>
+                    <input type="number" id="min_price" name="min_price" step="0.01">
+
+                    <label for="max_price">Max Price:</label>
+                    <input type="number" id="max_price" name="max_price" step="0.01">
+
+                    <button type="button" onclick="applyFilters()">Apply Filters</button>
+                </form>
+
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price }}</td>
+                                <td>{{ product.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Include DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable with empty filters
+            var dataTable = $('#productTable').DataTable();
+    
+            // Apply filters when the Apply Filters button is clicked
+            window.applyFilters = function () {
+                var minPrice = $('#min_price').val();
+                var maxPrice = $('#max_price').val();
+    
+                // Construct the filter query
+                var filterQuery = '';
+                if (minPrice) {
+                    filterQuery += 'min_price=' + encodeURIComponent(minPrice) + '&';
+                }
+                if (maxPrice) {
+                    filterQuery += 'max_price=' + encodeURIComponent(maxPrice) + '&';
+                }
+    
+                // Reload DataTable with new filters
+                dataTable.clear().draw();
+                dataTable.ajax.url('/list-products/?' + filterQuery).load();
+            };
+        });
+    </script>
+</body>
+</html>
